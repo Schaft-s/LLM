@@ -50,3 +50,4 @@ Splits seed=42: plant_dev/test = 40/40 groups; train remainder.
 - `requirements-colab.txt` pinned: transformers==4.57.1, trl==0.24.0, peft==0.17.1
 - Локальный smoke на Python 3.12 (`.venv-colab`): `scripts/smoke_colab_stack.py` → SMOKE_OK
 - Не использовать peft 0.17 с transformers 5 (HybridCache ImportError)
+- Не использовать `--force-reinstall -r requirements-colab.txt` в Colab: ломает numpy/torch (`_slice` ImportError). Ставить через `scripts/colab_install.sh`; при поломке — Disconnect and delete runtime.
