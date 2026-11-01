@@ -112,6 +112,18 @@ def _normalize_warmup_args(trainer_cfg: dict[str, Any]) -> dict[str, Any]:
     return t
 
 
+def _maybe_patch_training_chat_template(tokenizer):
+    """If TRL ships a Qwen2.5 training template with {% generation %}, use it."""
+    try:
+        from trl.chat_template_utils import get_training_chat_template
+    except ImportError:
+        return tokenizer
+    tmpl = get_training_chat_template(tokenizer)
+    if tmpl:
+        tokenizer.chat_template = tmpl
+    return tokenizer
+
+
 def _with_system_prompt(example: dict[str, Any], system_prompt: str) -> dict[str, Any]:
     messages = []
     if system_prompt:
@@ -168,6 +180,11 @@ def run_sft(
     sft = train_cfg.get("sft", {})
     max_length = sft.get("max_length", sft.get("max_seq_length", 1024))
     packing = bool(sft.get("packing", False))
+    # Qwen2.5 tokenizer chat template has no `{% generation %}` markers.
+    # TRL assistant_only_loss=True then crashes; keep False unless template is patched.
+    assistant_only_loss = bool(sft.get("assistant_only_loss", False))
+    if assistant_only_loss:
+        tok = _maybe_patch_training_chat_template(tok)
 
     sft_kwargs: dict[str, Any] = {
         "output_dir": out_dir,
@@ -177,7 +194,11 @@ def run_sft(
     }
     # Prefer modern max_length; fall back if an older TRL still wants max_seq_length only.
     try:
-        args = SFTConfig(**sft_kwargs, max_length=max_length, assistant_only_loss=True)
+        args = SFTConfig(
+            **sft_kwargs,
+            max_length=max_length,
+            assistant_only_loss=assistant_only_loss,
+        )
     except TypeError:
         try:
             args = SFTConfig(**sft_kwargs, max_length=max_length)
