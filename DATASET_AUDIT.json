@@ -1,0 +1,516 @@
+{
+  "audit_date": "2026-11-01",
+  "status": "research_completed_training_not_run",
+  "method": "Direct downloads and local parsers for all entries except FloraDB, whose card and samples were inspected. Counts describe raw snapshots and heuristic candidates, not final cleaned training data.",
+  "recommended_primary_source": "original_gardening_stackexchange_dump",
+  "sources": {
+    "original_gardening_stackexchange_dump": {
+      "archive_sha1": "718db7040d0b608b1c969d4630d8bb95db87eec5",
+      "post_rows": 44155,
+      "post_types": {
+        "1": 17860,
+        "2": 25421,
+        "5": 433,
+        "4": 433,
+        "7": 2,
+        "6": 6
+      },
+      "question_count": 17860,
+      "answer_count": 25421,
+      "user_count": 29094,
+      "tags_count": 540,
+      "question_creation_min": "2010-07-22T12:17:38.187",
+      "question_creation_max": "2024-03-31T20:07:29.273",
+      "post_content_licenses": {
+        "CC BY-SA 3.0": 24718,
+        "CC BY-SA 4.0": 19423,
+        "CC BY-SA 2.5": 14
+      },
+      "question_fields": [
+        "AcceptedAnswerId",
+        "AnswerCount",
+        "Body",
+        "ClosedDate",
+        "CommentCount",
+        "CommunityOwnedDate",
+        "ContentLicense",
+        "CreationDate",
+        "FavoriteCount",
+        "Id",
+        "LastActivityDate",
+        "LastEditDate",
+        "LastEditorDisplayName",
+        "LastEditorUserId",
+        "OwnerDisplayName",
+        "OwnerUserId",
+        "PostTypeId",
+        "Score",
+        "Tags",
+        "Title",
+        "ViewCount"
+      ],
+      "answer_fields": [
+        "Body",
+        "CommentCount",
+        "CommunityOwnedDate",
+        "ContentLicense",
+        "CreationDate",
+        "Id",
+        "LastActivityDate",
+        "LastEditDate",
+        "LastEditorDisplayName",
+        "LastEditorUserId",
+        "OwnerDisplayName",
+        "OwnerUserId",
+        "ParentId",
+        "PostTypeId",
+        "Score"
+      ],
+      "answered_questions": 15285,
+      "questions_with_accepted_answer_id": 7733,
+      "target_tag_stats": {
+        "houseplants": {
+          "questions": 1535,
+          "with_answers": 1261,
+          "with_accepted_answer": 600,
+          "with_positive_scored_answer": 1223,
+          "with_img_tag_in_question": 1171,
+          "closed": 49
+        },
+        "indoor": {
+          "questions": 0,
+          "with_answers": 0,
+          "with_accepted_answer": 0,
+          "with_positive_scored_answer": 0,
+          "with_img_tag_in_question": 0,
+          "closed": 0
+        },
+        "indoors": {
+          "questions": 758,
+          "with_answers": 659,
+          "with_accepted_answer": 342,
+          "with_positive_scored_answer": 638,
+          "with_img_tag_in_question": 436,
+          "closed": 16
+        },
+        "indoor-plants": {
+          "questions": 0,
+          "with_answers": 0,
+          "with_accepted_answer": 0,
+          "with_positive_scored_answer": 0,
+          "with_img_tag_in_question": 0,
+          "closed": 0
+        },
+        "container-gardening": {
+          "questions": 262,
+          "with_answers": 228,
+          "with_accepted_answer": 109,
+          "with_positive_scored_answer": 224,
+          "with_img_tag_in_question": 138,
+          "closed": 6
+        },
+        "pots": {
+          "questions": 22,
+          "with_answers": 22,
+          "with_accepted_answer": 18,
+          "with_positive_scored_answer": 22,
+          "with_img_tag_in_question": 6,
+          "closed": 0
+        },
+        "succulents": {
+          "questions": 421,
+          "with_answers": 365,
+          "with_accepted_answer": 190,
+          "with_positive_scored_answer": 359,
+          "with_img_tag_in_question": 329,
+          "closed": 14
+        },
+        "cactus": {
+          "questions": 316,
+          "with_answers": 262,
+          "with_accepted_answer": 119,
+          "with_positive_scored_answer": 257,
+          "with_img_tag_in_question": 260,
+          "closed": 8
+        },
+        "cacti": {
+          "questions": 0,
+          "with_answers": 0,
+          "with_accepted_answer": 0,
+          "with_positive_scored_answer": 0,
+          "with_img_tag_in_question": 0,
+          "closed": 0
+        },
+        "orchids": {
+          "questions": 88,
+          "with_answers": 72,
+          "with_accepted_answer": 36,
+          "with_positive_scored_answer": 71,
+          "with_img_tag_in_question": 67,
+          "closed": 3
+        },
+        "ficus": {
+          "questions": 90,
+          "with_answers": 70,
+          "with_accepted_answer": 30,
+          "with_positive_scored_answer": 66,
+          "with_img_tag_in_question": 61,
+          "closed": 2
+        },
+        "watering": {
+          "questions": 637,
+          "with_answers": 544,
+          "with_accepted_answer": 273,
+          "with_positive_scored_answer": 533,
+          "with_img_tag_in_question": 293,
+          "closed": 18
+        },
+        "plant-care": {
+          "questions": 889,
+          "with_answers": 728,
+          "with_accepted_answer": 335,
+          "with_positive_scored_answer": 694,
+          "with_img_tag_in_question": 657,
+          "closed": 26
+        }
+      },
+      "houseplants_best_answer_pairs": {
+        "count": 1261,
+        "positive_score_count": 1223,
+        "no_img_in_question_or_answer_count": 288,
+        "positive_score_and_no_img_count": 282,
+        "question_author_resolvable_user": 1252,
+        "answer_author_resolvable_user": 1249,
+        "question_license_values": {
+          "CC BY-SA 3.0": 540,
+          "CC BY-SA 4.0": 721
+        },
+        "answer_license_values": {
+          "CC BY-SA 3.0": 539,
+          "CC BY-SA 4.0": 722
+        }
+      },
+      "tag_format": "pipe-delimited, e.g. |houseplants|sunlight|",
+      "union_tag_stats": {
+        "houseplants_or_indoors": {
+          "tags": [
+            "houseplants",
+            "indoors"
+          ],
+          "questions_union": 2080,
+          "with_any_answer": 1733,
+          "positive_best_answer": 1680,
+          "no_img_in_q_or_best_a": 503,
+          "positive_no_img": 492,
+          "positive_no_img_not_closed": 476,
+          "accepted_or_best_selection_note": "Counts choose maximum Score answer, not AcceptedAnswerId."
+        },
+        "expanded_plant_container_tags": {
+          "tags": [
+            "houseplants",
+            "indoors",
+            "container-gardening",
+            "containers",
+            "pots",
+            "succulents",
+            "cactus",
+            "orchids",
+            "ficus",
+            "african-violets",
+            "aloe",
+            "dracaena",
+            "peace-lily",
+            "monstera",
+            "philodendron",
+            "jade",
+            "spider-plant"
+          ],
+          "questions_union": 3436,
+          "with_any_answer": 2889,
+          "positive_best_answer": 2802,
+          "no_img_in_q_or_best_a": 882,
+          "positive_no_img": 866,
+          "positive_no_img_not_closed": 838,
+          "accepted_or_best_selection_note": "Counts choose maximum Score answer, not AcceptedAnswerId."
+        }
+      },
+      "source_url": "https://archive.org/details/stackexchange",
+      "download_url": "https://archive.org/download/stackexchange/gardening.stackexchange.com.7z",
+      "file": {
+        "file_name": "gardening_original.7z",
+        "bytes": 43596356,
+        "sha256": "f739cc994a19445f6c2b54277e762980f28c82f7b1c2d1a12028f1fca3387d63"
+      },
+      "audit_type": "parsed Posts.xml, Users.xml, Tags.xml; structural counts and sample inspection",
+      "status": "preferred source, final content filtering not yet complete",
+      "limitations": [
+        "Candidate counts are overlapping sets, not additive and not final usable training counts.",
+        "No img markup is not proof of text sufficiency; images may also be supplemental.",
+        "Maximum answer Score, not accepted answer, used for structural candidate counts.",
+        "Positive votes are not factual expert verification.",
+        "Question and answer licenses and authors must be preserved separately."
+      ]
+    },
+    "flax_gardening": {
+      "source": "https://huggingface.co/datasets/flax-sentence-embeddings/stackexchange_titlebody_best_voted_answer_jsonl",
+      "revision": "5ce5373dcaed72457e1b61860d7368dca0f10179",
+      "file": "gardening.stackexchange.com.jsonl.gz",
+      "sha256": "278dbf75478d47df834340af82a371b38bee6079f26136c38fdcb9bdd16b744a",
+      "raw_rows": 13246,
+      "raw_row_schema": "JSON array [title+body, best_voted_answer]; no source ids/authors/tags in row",
+      "unique_questions": 13246,
+      "exact_duplicate_pairs": 0,
+      "empty_question": 0,
+      "empty_answer": 0,
+      "patterns": {
+        "strict_indoor": "\\b(house\\s*plants?|indoor\\s+plants?|monstera|pothos|peace lily|snake plant|zamioculcas|spider plant|philodendron|dracaena|calathea|sansevieria|ZZ plant)\\b",
+        "broad_indoor_candidates": "\\b(house\\s*plants?|indoor\\s+plants?|monstera|pothos|peace lily|snake plant|zamioculcas|spider plant|philodendron|dracaena|calathea|sansevieria|ZZ plant|succulents?|orchids?|ficus|aloe|cact(?:us|i)|potted|container)\\b",
+        "image_reference": "\\b(pictur(?:e|ed)|photos?|images?|see below|shown below|look like this)\\b|!\\[|imgur|stack\\.imgur",
+        "image_explicit_missing": "\\b(this (?:plant|flower|cactus)|what (?:is|are) th(?:is|ese)|identify|identification)\\b"
+      },
+      "heuristic_counts": {
+        "strict_indoor": 610,
+        "broad_indoor_candidates": 1949,
+        "image_reference": 2127,
+        "image_explicit_missing": 2635,
+        "broad_without_image_word": 1392
+      },
+      "length_characters": {
+        "question": {
+          "min": 54,
+          "median": 459.0,
+          "p95": 1351,
+          "max": 4168
+        },
+        "answer": {
+          "min": 17,
+          "median": 694.0,
+          "p95": 2353,
+          "max": 18483
+        }
+      },
+      "limitations": "Heuristics are not semantic labels or counts of ready training data. Missing image reference words does not establish text-only sufficiency. Not a factual correctness audit.",
+      "file_details": {
+        "file_name": "flax_gardening.stackexchange.com.jsonl.gz",
+        "bytes": 7575480,
+        "sha256": "278dbf75478d47df834340af82a371b38bee6079f26136c38fdcb9bdd16b744a"
+      },
+      "declared_hf_license": "CC BY-NC-SA 4.0",
+      "provenance_gap": "Per-row IDs, authors, URLs, tags absent; original Stack Exchange per-post licenses differ in metadata."
+    },
+    "mlfoundations_gardening": {
+      "rows": 42429,
+      "schema": "instruction: string\ncompletion: string\nconversations: list<element: struct<from: string, value: string>>\n  child 0, element: struct<from: string, value: string>\n      child 0, from: string\n      child 1, value: string\n-- schema metadata --\nhuggingface: '{\"info\": {\"features\": {\"instruction\": {\"dtype\": \"string\", \"' + 188",
+      "unique_instruction_exact": 17858,
+      "unique_instruction_norm": 17856,
+      "pattern_counts": {
+        "explicit_indoor": {
+          "rows": 3233,
+          "unique_instruction_exact": 1375
+        },
+        "common_houseplant_name": {
+          "rows": 3067,
+          "unique_instruction_exact": 1301
+        },
+        "visual_marker": {
+          "rows": 5956,
+          "unique_instruction_exact": 2478
+        },
+        "identity_marker": {
+          "rows": 3347,
+          "unique_instruction_exact": 1370
+        },
+        "answer_cannot_view": {
+          "rows": 1293,
+          "unique_instruction_exact": 766
+        }
+      },
+      "file": {
+        "file_name": "gardening.parquet",
+        "bytes": 118323006,
+        "sha256": "42d253032bbc300500d62d434cb620f161e024bae3f27362906faccabab40357"
+      },
+      "source_url": "https://huggingface.co/datasets/mlfoundations-dev/stackexchange_gardening",
+      "revision": "05aea8c79fabb359ae210585d831db0ca15be1e8",
+      "answer_origin": "GPT-4o-mini generated from Stack Exchange PostHistory-derived instructions",
+      "provenance_evidence_url": "https://huggingface.co/datasets/mlfoundations-dev/stackexchange_gardening/blob/05aea8c79fabb359ae210585d831db0ca15be1e8/config/stackexchange_gardening.yaml",
+      "license_status": "No explicit dataset license established in checked README; original-source and generation terms require verification",
+      "limitations": "Keyword pattern counts are not approved usable data. Multiple instruction repetitions must be grouped before splitting."
+    },
+    "ecosage": {
+      "source": "https://docs.google.com/spreadsheets/d/1wJjnk4WKmtW6nqo8xcblFH-8zmFrhwCY2QkExoNgXjM/export?format=csv",
+      "csv_bytes": 1002030,
+      "csv_sha256": "c169810fbf238f5dfbca938ef130381fe91edd3a4dfd20839e132fd44a2c65b1",
+      "csv_records_including_empty_separators": 3974,
+      "nonempty_rows_excluding_header": 2558,
+      "dialogue_blocks": 971,
+      "unique_dialogue_ids": 960,
+      "unique_post_urls": 968,
+      "complete_pairs": 2554,
+      "unique_complete_pairs": 2247,
+      "dialogues_with_at_least_one_image_link": 801,
+      "dialogues_without_image_link": 170,
+      "source_domains_normalized": {
+        "houzz.com": 599,
+        "reddit.com": 372
+      },
+      "pair_lengths_per_dialogue": {
+        "2": 439,
+        "3": 463,
+        "4": 55,
+        "5": 12,
+        "1": 1,
+        "6": 1
+      },
+      "warning": "These are snapshot structural counts, not vetted usable text-only dialogue counts. Dialogue ID repeats; group by sequential header rows, then deduplicate by canonical source post ID.",
+      "file": {
+        "file_name": "ecosage_sheet.csv",
+        "bytes": 1002030,
+        "sha256": "c169810fbf238f5dfbca938ef130381fe91edd3a4dfd20839e132fd44a2c65b1"
+      },
+      "paper_url": "https://arxiv.org/html/2401.06807v1",
+      "repo_url": "https://github.com/mohit2b/EcoSage",
+      "paper_counts": {
+        "dialogues": 963,
+        "utterances": 4914,
+        "dialogues_with_images": 796
+      },
+      "license_status": "Repository MIT does not by itself establish rights to all Houzz/Reddit content",
+      "answer_origin": "edited forum-derived dialogues; paper describes human curation"
+    },
+    "plantclinic": {
+      "row_count": 5038,
+      "sources": {
+        "suhani_gardening": 1244,
+        "stackexchange_gardening": 3376,
+        "wikipedia": 411,
+        "zenodo": 7
+      },
+      "licenses": {
+        "unknown": 1244,
+        "CC-BY-SA-4.0": 3787,
+        "CC-BY-4.0": 7
+      },
+      "overlap_mlfoundations": {
+        "question_matches_mlfoundations": 3337,
+        "answer_is_prefix_of_mlfoundations": 1528,
+        "full_answer_exact_normalized": 1804,
+        "question_no_match": 19,
+        "no_qa_separator": 20,
+        "answer_differs": 5
+      },
+      "source_url": "https://huggingface.co/datasets/bmeyer2025/plantclinic-care-corpus",
+      "revision": "41adc30ed13857072654d790b2b0b2b524d517e7",
+      "file": {
+        "file_name": "plantclinic.parquet",
+        "bytes": 4817457,
+        "sha256": "e42fe53d89fb2ed7be795df57bd2d2049cb542689a6369163e95bbda8fa2efbe"
+      },
+      "overlap_exact_plus_prefix": 3332,
+      "limitations": "Not independent of mlfoundations; fragments may be truncated; unknown-license rows present."
+    },
+    "other_qa": [
+      {
+        "repo": "CJJones/Gardening_LLM_Synthetic_Training_Multiturn_Dialog",
+        "revision": "67a46adab06e8c4110118f1a777e5f85ba56bf3c",
+        "bytes": 274104,
+        "lines": 3248,
+        "empty_lines": 498,
+        "conversations": 250,
+        "max_conversation_id": 250,
+        "gardenbot_turns": 1250,
+        "topic_counts": {
+          "Pests": 51,
+          "Soil": 50,
+          "Watering": 47,
+          "Planting": 51,
+          "Composting": 51
+        },
+        "indoor_keyword_lines": 356,
+        "source_url": "https://huggingface.co/datasets/CJJones/Gardening_LLM_Synthetic_Training_Multiturn_Dialog",
+        "file": {
+          "file_name": "Gardening_Sample.txt",
+          "bytes": 274104,
+          "sha256": "6a046453a33dd911fff632ed254a6168bdea7d6e99b961d15732739f2d32b14c"
+        },
+        "status": "Not selected as main houseplant dataset"
+      },
+      {
+        "repo": "KisanVaani/agriculture-qa-english-only",
+        "revision": "2f32fb399fbb71eb417235aeb349e637f785a0fd",
+        "rows": 22615,
+        "columns": [
+          "question",
+          "answers"
+        ],
+        "duplicate_rows": 20284,
+        "unique_questions": 2225,
+        "unique_normalized_questions": 2212,
+        "indoor_keyword_candidates": 9,
+        "source_url": "https://huggingface.co/datasets/KisanVaani/agriculture-qa-english-only",
+        "file": {
+          "file_name": "train-00000-of-00001.parquet",
+          "bytes": 1969746,
+          "sha256": "a77850bd7e9d7dda41204dc794466411563b6ea9cdd8e8d329add6097440be45"
+        },
+        "unique_pairs": 2331,
+        "duplicate_fraction": 0.8969268184833076,
+        "status": "Not selected as main houseplant dataset"
+      },
+      {
+        "repo": "flamiinngo/agronomy-qa-agriculture",
+        "revision": "479a3d066d221343ea1cee8053e4950316cbadb3",
+        "rows": 1914,
+        "columns": [
+          "question",
+          "answer"
+        ],
+        "duplicate_rows": 0,
+        "unique_questions": 1914,
+        "unique_normalized_questions": 1906,
+        "indoor_keyword_candidates": 6,
+        "source_url": "https://huggingface.co/datasets/flamiinngo/agronomy-qa-agriculture",
+        "file": {
+          "file_name": "agriculture_dataset.csv",
+          "bytes": 557067,
+          "sha256": "031baf36d7ea2736221f64b85b3b75c7b56eee4d8ad40601a1d27d5bdec17a46"
+        },
+        "status": "Not selected as main houseplant dataset"
+      }
+    ],
+    "plantfolio": {
+      "source_url": "https://github.com/Luminoid/plantfolio-common-plants",
+      "download_url": "https://raw.githubusercontent.com/Luminoid/plantfolio-common-plants/main/dist/common_plants.json",
+      "revision": "main at retrieval, content pinned by SHA256",
+      "file": {
+        "file_name": "plantfolio_dist.json",
+        "bytes": 1408521,
+        "sha256": "432de43b36cefacc8a6ebb1d3b1f76836f2fac906e4a9da38e1de76aa3f36efd"
+      },
+      "declared_version": "1.10.0",
+      "array_entries": 981,
+      "metadata_entries": 1,
+      "plant_profiles": 980,
+      "declared_license": "CC BY-NC-SA 4.0",
+      "status": "structured profiles, not ready instruction QA",
+      "limitations": "Mixed indoor/outdoor/agricultural categories; descriptions elsewhere still say 952. No complete factual review performed."
+    },
+    "floradb": {
+      "source_url": "https://huggingface.co/datasets/Ichlibitiche/floradb-houseplants-care-sample",
+      "profiles_from_card": 100,
+      "declared_license": "CC BY-NC 4.0",
+      "audit_scope": "dataset card and samples only; no full-file audit",
+      "status": "structured profiles, not ready instruction QA"
+    }
+  },
+  "not_yet_done": [
+    "full semantic and factual filtering",
+    "final train/dev/test split",
+    "general capability evaluation dataset creation",
+    "model baseline generation",
+    "fine-tuning",
+    "Mac/T4 compatibility verification",
+    "paid OpenRouter calls",
+    "final before/after scores"
+  ]
+}

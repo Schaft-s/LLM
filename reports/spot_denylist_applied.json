@@ -1,0 +1,13 @@
+{
+  "deny_ids": [
+    "gardening-q17501-a17675",
+    "gardening-q20502-a20503",
+    "gardening-q22777-a22778",
+    "gardening-q53109-a53110"
+  ],
+  "removed": {
+    "plant_train": 2,
+    "plant_dev": 1,
+    "plant_test": 1
+  }
+}

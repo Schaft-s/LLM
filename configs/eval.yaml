@@ -1,0 +1,46 @@
+seed: 42
+
+paths:
+  plant_dev: data/processed/plant_dev.jsonl
+  plant_test: data/processed/plant_test.jsonl
+  general_dev: data/processed/general_dev.jsonl
+  general_test: data/processed/general_test.jsonl
+  outputs_dir: reports/metrics
+
+general:
+  dev_size: 80
+  test_size: 160
+  categories:
+    - arith
+    - units
+    - extract
+    - logic
+    - json_schema
+    - stable_facts
+  per_category_dev: 10
+  per_category_test: 20
+  arc_easy_dev: 20
+  arc_easy_test: 40
+  arc_dataset: allenai/ai2_arc
+  arc_config: ARC-Easy
+
+format_checker:
+  name: three_numbered_steps
+  description: >
+    When the prompt asks for exactly three numbered steps, the answer must
+    contain three non-empty items labeled 1/2/3 without duplicating one tip.
+
+checkpoint_rule:
+  max_general_dev_drop_pp: 5.0
+  require_plant_dev_not_worse: true
+
+baseline_prompts:
+  - id: baseline_fern_tips
+    content: >
+      My Boston fern has brown tips on several fronds. It sits near an east window,
+      I water when the top inch of soil feels dry, and humidity is low in winter.
+      Give exactly 3 numbered steps I should try first.
+  - id: baseline_orchid_leaf
+    content: >
+      One lower leaf on my Phalaenopsis orchid is yellowing while the rest look healthy.
+      The plant is in bark mix, watered weekly. What should I check, and what should I do next?

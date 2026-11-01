@@ -1,0 +1,32 @@
+{
+  "questions_total": 17860,
+  "expanded_tag_candidates_with_positive_answer": 2802,
+  "technical_filter_kept_like_audit": 839,
+  "after_sufficiency_kept": 825,
+  "dropped": 1977,
+  "drop_reason_counts": {
+    "img_markup": 1935,
+    "image_dependent": 517,
+    "identification_only": 6,
+    "closed": 45,
+    "short_answer": 28,
+    "outdoor_agriculture": 3,
+    "short_question": 10
+  },
+  "audit_expected_technical": 838,
+  "split_sizes": {
+    "plant_train": {
+      "rows": 745,
+      "groups": 745
+    },
+    "plant_dev": {
+      "rows": 40,
+      "groups": 40
+    },
+    "plant_test": {
+      "rows": 40,
+      "groups": 40
+    }
+  },
+  "spot_review_path": "data/manifests/spot_review_25.jsonl"
+}

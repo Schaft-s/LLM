@@ -1,0 +1,46 @@
+source:
+  name: gardening.stackexchange.com
+  archive: data/raw/gardening.stackexchange.com.7z
+  posts_xml: data/raw/Posts.xml
+  archive_sha1: 718db7040d0b608b1c969d4630d8bb95db87eec5
+
+expanded_tags:
+  - houseplants
+  - indoors
+  - container-gardening
+  - containers
+  - pots
+  - succulents
+  - cactus
+  - orchids
+  - ficus
+  - african-violets
+  - aloe
+  - dracaena
+  - peace-lily
+  - monstera
+  - philodendron
+  - jade
+  - spider-plant
+
+filters:
+  require_best_answer_score_gt: 0
+  drop_img_markup: true
+  drop_closed: true
+  drop_image_dependent_heuristics: true
+  min_question_chars: 40
+  min_answer_chars: 80
+
+split:
+  seed: 42
+  plant_dev_size: 40
+  plant_test_size: 40
+
+paths:
+  candidates: data/processed/plant_candidates.jsonl
+  spot_review: data/manifests/spot_review_25.jsonl
+  plant_train: data/processed/plant_train.jsonl
+  plant_dev: data/processed/plant_dev.jsonl
+  plant_test: data/processed/plant_test.jsonl
+  metadata_sidecar: data/manifests/plant_metadata.jsonl
+  filter_report: reports/data_filter_report.json
