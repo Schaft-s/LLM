@@ -60,6 +60,34 @@ def build_lora_config(train_cfg: dict[str, Any]):
     )
 
 
+def _transformers_major() -> int:
+    import transformers
+
+    return int(transformers.__version__.split(".", 1)[0])
+
+
+def _normalize_warmup_args(trainer_cfg: dict[str, Any]) -> dict[str, Any]:
+    """transformers v4 wants warmup_ratio; v5 removed it in favor of float warmup_steps."""
+    t = dict(trainer_cfg)
+    ratio = t.pop("warmup_ratio", None)
+    steps = t.get("warmup_steps", None)
+    major = _transformers_major()
+    if major >= 5:
+        if ratio is not None and steps is None:
+            t["warmup_steps"] = ratio
+        # float warmup_steps is valid on v5; drop legacy key already popped
+    else:
+        # v4: warmup_steps must be int; restore ratio if we only have a float fraction
+        if isinstance(steps, float) and steps < 1:
+            t.pop("warmup_steps", None)
+            t["warmup_ratio"] = steps
+        elif ratio is not None:
+            t["warmup_ratio"] = ratio
+            if isinstance(steps, float) and steps < 1:
+                t.pop("warmup_steps", None)
+    return t
+
+
 def _with_system_prompt(example: dict[str, Any], system_prompt: str) -> dict[str, Any]:
     messages = []
     if system_prompt:
@@ -103,11 +131,7 @@ def run_sft(
 
     out_dir = train_cfg["pilot"]["output_dir"] if pilot else train_cfg["output_dir"]
     t = dict(train_cfg["trainer"])
-    # transformers v5: warmup_ratio removed; accept legacy key from older configs
-    if "warmup_ratio" in t and "warmup_steps" not in t:
-        t["warmup_steps"] = t.pop("warmup_ratio")
-    else:
-        t.pop("warmup_ratio", None)
+    t = _normalize_warmup_args(t)
 
     if pilot:
         t["max_steps"] = train_cfg["pilot"]["max_steps"]

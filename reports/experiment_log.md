@@ -45,6 +45,8 @@ Splits seed=42: plant_dev/test = 40/40 groups; train remainder.
 
 ### Исправление
 
-- `configs/train.yaml`: `warmup_steps: 0.03` вместо `warmup_ratio`
+- `configs/train.yaml`: `warmup_ratio` (v4); код мапит на float `warmup_steps` для v5
 - `src/train/sft_qlora.py`: `SFTConfig` + `processing_class` + `peft_config`, native `messages`
-- `requirements-colab.txt` + ноутбук без unpinned `-U`
+- `requirements-colab.txt` pinned: transformers==4.57.1, trl==0.24.0, peft==0.17.1
+- Локальный smoke на Python 3.12 (`.venv-colab`): `scripts/smoke_colab_stack.py` → SMOKE_OK
+- Не использовать peft 0.17 с transformers 5 (HybridCache ImportError)

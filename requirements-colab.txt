@@ -1,12 +1,16 @@
-# Pinned Colab T4 stack (transformers v5 + modern TRL).
-# Install with: %pip install -q -r requirements-colab.txt
-transformers>=5.0.0,<5.4
-trl>=0.22.0,<0.25
-peft>=0.14.0,<0.18
-bitsandbytes>=0.45.0,<0.48
-accelerate>=1.0.0,<1.6
-datasets>=3.0.0,<4.0
-pyyaml>=6.0.1
-python-dotenv>=1.0.1
-matplotlib>=3.8.0
-pandas>=2.2.0
+# Exact pins verified in local .venv-colab (Python 3.12) via scripts/smoke_colab_stack.py.
+# transformers 4.57 + peft 0.17: avoids HybridCache break (peft 0.17 × transformers 5).
+# Colab: Runtime → Restart session, then force-reinstall this file.
+transformers==4.57.1
+trl==0.24.0
+peft==0.17.1
+accelerate==1.10.1
+datasets==3.6.0
+pyyaml==6.0.2
+python-dotenv==1.1.1
+matplotlib==3.10.3
+pandas==2.2.3
+sentencepiece==0.2.1
+protobuf==5.29.5
+# Linux/Colab CUDA only (Mac wheels differ); needed for QLoRA on T4
+bitsandbytes==0.45.5; platform_system == "Linux"

@@ -31,7 +31,17 @@ python scripts/run_judge.py --input data/processed/plant_dev.jsonl --limit 1 --d
 5. Сравните base vs adapter на `plant_*` и `general_*` одинаковыми decoding settings.
 6. Чекпоинт: plant_dev не хуже базы **и** general_dev не падает больше чем на **5 п.п.**
 
-Не ставьте голый `pip install -U transformers trl` — API ломается (`warmup_ratio`, `tokenizer=`).  
+Не ставьте голый `pip install -U transformers trl peft` — ломает API и даёт `HybridCache` ImportError (peft 0.17 × transformers 5).
+
+Локальная проверка пинов (Python ≥3.10):
+
+```bash
+python3.12 -m venv .venv-colab && source .venv-colab/bin/activate
+pip install -r requirements-colab.txt pytest
+python scripts/smoke_colab_stack.py
+pytest -q
+```
+
 Веса и большие артефакты в git не кладём — ссылка на Drive/HF в отчёте.
 
 ## Что уже в репозитории
