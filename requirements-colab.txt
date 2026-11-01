@@ -1,17 +1,13 @@
-# Only our training stack. Do NOT force-reinstall Colab's global numpy/torch/protobuf.
-# Verified locally (py3.12): scripts/smoke_colab_stack.py
+# Only our training stack. Do NOT --force-reinstall Colab's global numpy/torch.
+# Verified locally (py3.12 imports): scripts/smoke_colab_stack.py
 #
-# Install in Colab AFTER Runtime → Disconnect and delete runtime (if a previous
-# --force-reinstall broke numpy/torch):
-#   %pip install -q -r requirements-colab.txt
-#
+# Colab (CUDA 13 / T4): bitsandbytes must be new enough to ship
+# libbitsandbytes_cuda130.so. 0.45.x falls back to CPU and breaks QLoRA.
 transformers==4.57.1
 trl==0.24.0
 peft==0.17.1
 accelerate==1.10.1
-# Linux/Colab CUDA wheels only (Mac has different available versions)
-bitsandbytes==0.45.5; platform_system == "Linux"
 datasets==3.6.0
-# Keep numpy in the range Colab/sklearn/scipy expect after our install
 numpy>=1.26.0,<2.3
-
+# Linux/Colab only — needs CUDA 13 wheel
+bitsandbytes>=0.49.2,<0.51; platform_system == "Linux"

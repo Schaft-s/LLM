@@ -26,6 +26,27 @@ def build_bnb_config(model_cfg: dict[str, Any]):
     )
 
 
+def _assert_bnb_cuda_ready() -> None:
+    """Fail early with a clear message if bitsandbytes cannot quantize on GPU."""
+    import torch
+
+    if not torch.cuda.is_available():
+        raise RuntimeError("CUDA is not available. In Colab: Runtime → Change runtime type → T4 GPU.")
+    try:
+        import bitsandbytes as bnb
+        from pathlib import Path
+
+        libs = list(Path(bnb.__file__).resolve().parent.glob("libbitsandbytes_cuda*.so"))
+    except Exception as exc:  # noqa: BLE001
+        raise RuntimeError(f"bitsandbytes import failed: {exc}") from exc
+    if not libs:
+        raise RuntimeError(
+            "bitsandbytes installed without CUDA kernels (CPU-only). "
+            "On Colab CUDA 13 install bitsandbytes>=0.49.2 "
+            "(see scripts/colab_install.sh / requirements-colab.txt)."
+        )
+
+
 def load_model_and_tokenizer(model_cfg: dict[str, Any]):
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -34,7 +55,10 @@ def load_model_and_tokenizer(model_cfg: dict[str, Any]):
     tok = AutoTokenizer.from_pretrained(model_id, revision=revision, use_fast=True)
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
-    bnb = build_bnb_config(model_cfg) if model_cfg.get("load_in_4bit", True) else None
+    use_4bit = bool(model_cfg.get("load_in_4bit", True))
+    if use_4bit:
+        _assert_bnb_cuda_ready()
+    bnb = build_bnb_config(model_cfg) if use_4bit else None
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
         revision=revision,

@@ -51,3 +51,4 @@ Splits seed=42: plant_dev/test = 40/40 groups; train remainder.
 - Локальный smoke на Python 3.12 (`.venv-colab`): `scripts/smoke_colab_stack.py` → SMOKE_OK
 - Не использовать peft 0.17 с transformers 5 (HybridCache ImportError)
 - Не использовать `--force-reinstall -r requirements-colab.txt` в Colab: ломает numpy/torch (`_slice` ImportError). Ставить через `scripts/colab_install.sh`; при поломке — Disconnect and delete runtime.
+- Colab CUDA 13: `bitsandbytes==0.45.5` ставит CPU wheel → `cquantize_blockwise_fp16_nf4` AttributeError. Нужен `bitsandbytes>=0.49.2` с `libbitsandbytes_cuda130.so`.
