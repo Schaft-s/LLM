@@ -24,14 +24,14 @@ python scripts/run_judge.py --input data/processed/plant_dev.jsonl --limit 1 --d
 
 ## Colab T4
 
-1. Залейте репозиторий на Drive или сделайте `git clone`.
-2. Откройте `notebooks/rk1_colab.ipynb`, Runtime = GPU T4.
-3. Установите зависимости из ячейки.
-4. Pilot: `python scripts/train_qlora.py --pilot` (save/reload).
-5. S1: `python scripts/train_qlora.py`.
-6. Сравните base vs adapter на `plant_*` и `general_*` одинаковыми decoding settings.
-7. Чекпоинт: plant_dev не хуже базы **и** general_dev не падает больше чем на **5 п.п.**
+1. Откройте `notebooks/rk1_colab.ipynb`, Runtime = GPU T4.
+2. Ячейка clone/`git pull`, затем `%pip install -r requirements-colab.txt` (закреплённый стек transformers v5 + TRL).
+3. Pilot: `python scripts/train_qlora.py --pilot` (save/reload + 1 generation).
+4. S1: `python scripts/train_qlora.py`.
+5. Сравните base vs adapter на `plant_*` и `general_*` одинаковыми decoding settings.
+6. Чекпоинт: plant_dev не хуже базы **и** general_dev не падает больше чем на **5 п.п.**
 
+Не ставьте голый `pip install -U transformers trl` — API ломается (`warmup_ratio`, `tokenizer=`).  
 Веса и большие артефакты в git не кладём — ссылка на Drive/HF в отчёте.
 
 ## Что уже в репозитории

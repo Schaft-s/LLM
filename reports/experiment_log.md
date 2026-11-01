@@ -33,3 +33,18 @@ Splits seed=42: plant_dev/test = 40/40 groups; train remainder.
 - Массовый judge на plant_dev subsample.
 - Baseline/SFT генерации и таблицы метрик.
 - Pin revision модели после первого успешного download.
+
+## 2026-11-01 — Colab API fix (transformers v5)
+
+### Симптомы на T4
+
+1. `TrainingArguments ... unexpected keyword argument 'warmup_ratio'`
+2. `SFTTrainer ... unexpected keyword argument 'tokenizer'`
+
+Причина: `%pip install -U` подтянул transformers v5 / новый TRL.
+
+### Исправление
+
+- `configs/train.yaml`: `warmup_steps: 0.03` вместо `warmup_ratio`
+- `src/train/sft_qlora.py`: `SFTConfig` + `processing_class` + `peft_config`, native `messages`
+- `requirements-colab.txt` + ноутбук без unpinned `-U`

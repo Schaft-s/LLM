@@ -22,7 +22,8 @@ lora:
     - down_proj
 
 sft:
-  max_seq_length: 1024
+  # transformers/TRL modern name is max_length; max_seq_length kept as alias in code
+  max_length: 1024
   packing: false
 
 trainer:
@@ -31,7 +32,8 @@ trainer:
   gradient_accumulation_steps: 8
   learning_rate: 1.0e-4
   num_train_epochs: 1
-  warmup_ratio: 0.03
+  # transformers v5: float in [0,1) = ratio of total steps
+  warmup_steps: 0.03
   logging_steps: 10
   eval_strategy: steps
   eval_steps: 50

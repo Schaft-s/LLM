@@ -1,0 +1,12 @@
+# Pinned Colab T4 stack (transformers v5 + modern TRL).
+# Install with: %pip install -q -r requirements-colab.txt
+transformers>=5.0.0,<5.4
+trl>=0.22.0,<0.25
+peft>=0.14.0,<0.18
+bitsandbytes>=0.45.0,<0.48
+accelerate>=1.0.0,<1.6
+datasets>=3.0.0,<4.0
+pyyaml>=6.0.1
+python-dotenv>=1.0.1
+matplotlib>=3.8.0
+pandas>=2.2.0

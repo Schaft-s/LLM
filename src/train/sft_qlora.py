@@ -1,4 +1,4 @@
-"""QLoRA SFT helpers for Colab T4 (transformers + TRL + PEFT + bitsandbytes)."""
+"""QLoRA SFT helpers for Colab T4 (transformers v5 + modern TRL + PEFT + bitsandbytes)."""
 
 from __future__ import annotations
 
@@ -60,12 +60,21 @@ def build_lora_config(train_cfg: dict[str, Any]):
     )
 
 
-def formatting_prompts_func(example: dict[str, Any], tokenizer, system_prompt: str) -> str:
+def _with_system_prompt(example: dict[str, Any], system_prompt: str) -> dict[str, Any]:
     messages = []
     if system_prompt:
         messages.append({"role": "system", "content": system_prompt})
     messages.extend(example["messages"])
-    return tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=False)
+    return {"messages": messages}
+
+
+def _prepare_chat_dataset(ds, system_prompt: str):
+    """Keep only conversational `messages` (native TRL format)."""
+    ds = ds.map(lambda ex: _with_system_prompt(ex, system_prompt))
+    drop = [c for c in ds.column_names if c != "messages"]
+    if drop:
+        ds = ds.remove_columns(drop)
+    return ds
 
 
 def run_sft(
@@ -76,13 +85,10 @@ def run_sft(
 ) -> str:
     """Train and return adapter output directory."""
     from datasets import load_dataset
-    from peft import get_peft_model, prepare_model_for_kbit_training
-    from transformers import TrainingArguments
-    from trl import SFTTrainer
+    from trl import SFTConfig, SFTTrainer
 
     model, tok = load_model_and_tokenizer(model_cfg)
-    model = prepare_model_for_kbit_training(model)
-    model = get_peft_model(model, build_lora_config(train_cfg))
+    peft_config = build_lora_config(train_cfg)
 
     train_ds = load_dataset("json", data_files=train_cfg["data"]["train_file"], split="train")
     eval_file = train_cfg["data"].get("eval_file")
@@ -91,34 +97,53 @@ def run_sft(
     )
 
     system_prompt = model_cfg.get("system_prompt", "").strip()
-
-    def _format(ex):
-        return formatting_prompts_func(ex, tok, system_prompt)
+    train_ds = _prepare_chat_dataset(train_ds, system_prompt)
+    if eval_ds is not None:
+        eval_ds = _prepare_chat_dataset(eval_ds, system_prompt)
 
     out_dir = train_cfg["pilot"]["output_dir"] if pilot else train_cfg["output_dir"]
     t = dict(train_cfg["trainer"])
+    # transformers v5: warmup_ratio removed; accept legacy key from older configs
+    if "warmup_ratio" in t and "warmup_steps" not in t:
+        t["warmup_steps"] = t.pop("warmup_ratio")
+    else:
+        t.pop("warmup_ratio", None)
+
     if pilot:
         t["max_steps"] = train_cfg["pilot"]["max_steps"]
         t["num_train_epochs"] = 1
         t["eval_strategy"] = "no"
         t["save_strategy"] = "steps"
         t["save_steps"] = max(1, train_cfg["pilot"]["max_steps"])
+        eval_ds = None
 
-    args = TrainingArguments(
-        output_dir=out_dir,
+    sft = train_cfg.get("sft", {})
+    max_length = sft.get("max_length", sft.get("max_seq_length", 1024))
+    packing = bool(sft.get("packing", False))
+
+    sft_kwargs: dict[str, Any] = {
+        "output_dir": out_dir,
         **{k: v for k, v in t.items() if k != "output_dir"},
-        seed=train_cfg.get("seed", 42),
-    )
+        "seed": train_cfg.get("seed", 42),
+        "packing": packing,
+    }
+    # Prefer modern max_length; fall back if an older TRL still wants max_seq_length only.
+    try:
+        args = SFTConfig(**sft_kwargs, max_length=max_length, assistant_only_loss=True)
+    except TypeError:
+        try:
+            args = SFTConfig(**sft_kwargs, max_length=max_length)
+        except TypeError:
+            args = SFTConfig(**sft_kwargs, max_seq_length=max_length)
 
+    # Pass base quantized model + peft_config (do not wrap with get_peft_model first).
     trainer = SFTTrainer(
         model=model,
-        tokenizer=tok,
+        args=args,
         train_dataset=train_ds,
         eval_dataset=eval_ds,
-        formatting_func=_format,
-        max_seq_length=train_cfg["sft"]["max_seq_length"],
-        packing=train_cfg["sft"].get("packing", False),
-        args=args,
+        processing_class=tok,
+        peft_config=peft_config,
     )
     trainer.train()
     Path(out_dir).mkdir(parents=True, exist_ok=True)
