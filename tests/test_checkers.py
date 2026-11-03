@@ -29,6 +29,17 @@ def test_three_steps_fail_duplicate():
     assert "duplicat" in r.detail
 
 
+def test_three_steps_fail_five_steps():
+    text = """1. Check soil moisture with a finger.
+2. Empty the saucer after watering.
+3. Move the pot closer to the window.
+4. Repot into a fast-draining mix.
+5. Fertilize lightly in spring.
+"""
+    r = check_three_numbered_steps(text)
+    assert not r.passed
+
+
 def test_three_steps_fail_empty_third():
     text = """1. Check soil moisture with a finger.
 2. Empty the saucer after watering.

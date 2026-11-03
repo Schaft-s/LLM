@@ -28,7 +28,7 @@ python scripts/run_judge.py --input data/processed/plant_dev.jsonl --limit 1 --d
 2. Ячейка clone/`git pull`, затем `bash scripts/colab_install.sh` (пины 4.57/trl/peft; без `--force-reinstall`).
 3. Pilot: `python scripts/train_qlora.py --pilot` (save/reload + 1 generation).
 4. S1: `python scripts/train_qlora.py`.
-5. Сравните base vs adapter на `plant_*` и `general_*` одинаковыми decoding settings.
+5. Сравните base vs adapter на `plant_*` и `general_*` одинаковыми decoding settings: `notebooks/rk1_eval_overnight.ipynb` (адаптер с Drive, результаты на Drive, возобновляемо).
 6. Чекпоинт: plant_dev не хуже базы **и** general_dev не падает больше чем на **5 п.п.**
 
 Не ставьте голый `pip install -U transformers trl peft` — ломает API и даёт `HybridCache` ImportError (peft 0.17 × transformers 5).

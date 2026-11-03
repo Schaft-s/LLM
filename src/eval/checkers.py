@@ -23,7 +23,7 @@ def _extract_numbered_steps(text: str) -> dict[int, str]:
     found: dict[int, str] = {}
     # Prefer line-start numbered items
     for line in (text or "").splitlines():
-        m = re.match(r"\s*(?:step\s*)?([1-3])[\.\)\:]\s*(.+)$", line, re.IGNORECASE)
+        m = re.match(r"\s*(?:step\s*)?(\d+)[\.\)\:]\s*(.+)$", line, re.IGNORECASE)
         if not m:
             continue
         n = int(m.group(1))
