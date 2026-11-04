@@ -1,0 +1,60 @@
+run_name: s1_plant_qlora
+output_dir: artifacts/weights/s1_plant_qlora
+seed: 42
+
+data:
+  train_file: data/processed/plant_train.jsonl
+  eval_file: data/processed/plant_dev.jsonl
+
+lora:
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  bias: none
+  task_type: CAUSAL_LM
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+sft:
+  # transformers/TRL modern name is max_length; max_seq_length kept as alias in code
+  max_length: 1024
+  packing: false
+  # Requires chat template `{% generation %}` markers; Qwen2.5 stock template lacks them.
+  assistant_only_loss: false
+
+
+trainer:
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 1
+  gradient_accumulation_steps: 8
+  learning_rate: 1.0e-4
+  num_train_epochs: 1
+  # v4: warmup_ratio; code maps to warmup_steps float on transformers>=5
+  warmup_ratio: 0.03
+
+  logging_steps: 10
+  eval_strategy: steps
+  eval_steps: 50
+  save_strategy: steps
+  save_steps: 50
+  save_total_limit: 3
+  bf16: false
+  fp16: true
+  optim: paged_adamw_8bit
+  lr_scheduler_type: cosine
+  report_to: none
+  max_steps: -1  # set small positive for pilot
+
+checkpoint_selection:
+  max_general_dev_drop_pp: 5.0
+  require_plant_dev_not_worse: true
+
+pilot:
+  max_steps: 20
+  output_dir: artifacts/weights/pilot_qlora

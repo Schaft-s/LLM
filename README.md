@@ -44,6 +44,14 @@ pytest -q
 
 Веса и большие артефакты в git не кладём — ссылка на Drive/HF в отчёте.
 
+## Результаты РК1
+
+Отчёт: `reports/rk1_report.md`. Сводка метрик, генерации, оценки судьи, лог: `results/eval_s1/` (`summary.md`), графики: `reports/plots/`. Выполненные ноутбуки T4: `results/*.ipynb`.
+
+LoRA-адаптер S1 (safetensors, + checkpoint-50/93) и копия результатов оценки: [Google Drive: rk1_houseplant](https://drive.google.com/drive/folders/1g7BVgQWBTlDQSJo2VaVZyYB7fwkrT-6c?usp=sharing).
+
+Воспроизвести оценку без обучения: загрузить папку адаптера в `MyDrive/rk1_houseplant/s1_plant_qlora`, открыть `notebooks/rk1_eval_overnight.ipynb` в Colab (T4), добавить Secret `OPENROUTER_API_KEY`, Run all.
+
 ## Что уже в репозитории
 
 | Артефакт | Путь |

@@ -53,3 +53,24 @@ Splits seed=42: plant_dev/test = 40/40 groups; train remainder.
 - Не использовать `--force-reinstall -r requirements-colab.txt` в Colab: ломает numpy/torch (`_slice` ImportError). Ставить через `scripts/colab_install.sh`; при поломке — Disconnect and delete runtime.
 - Colab CUDA 13: `bitsandbytes==0.45.5` ставит CPU wheel → `cquantize_blockwise_fp16_nf4` AttributeError. Нужен `bitsandbytes>=0.49.2` с `libbitsandbytes_cuda130.so`.
 - `assistant_only_loss=True` ломает Qwen2.5 (нет `{% generation %}` в chat template). Для pilot/S1: `assistant_only_loss: false` (loss по всей последовательности).
+
+## 2026-11-01..03 — Pilot, S1, eval
+
+- Pilot 20 steps: loss 2.95→2.29, save/reload + генерация OK (3 пункта).
+- S1: 1 epoch, 93 steps, 870 s T4; loss 3.04→2.08; eval_loss plant_dev 2.07 (step 50). Адаптер + checkpoint-50/93 на Drive.
+- Первый eval упал FileNotFound: не было шага генерации → `scripts/run_eval_pipeline.py` (resumable, пишет на Drive).
+- Исправлено до прогона: checker принимал 5 шагов; judge кэшировал ошибки.
+- Eval 2026-11-03 (~54 мин): dev judge base 6.54 / S1 3.15 / step50 2.97; format 0.92 / 0.18 / 0.23; general 0.825 / 0.863 / 0.863.
+- Правило: оба SFT-чекпоинта не прошли (plant хуже) → selected = base.
+- Test: judge 6.64 → 3.67, format 0.97 → 0.13, general 0.819 → 0.863.
+- Причина (по данным train): нумерованные списки у 3% ответов, «I think / I'm no expert» у 20%.
+- S2 не запускался: регрессии general нет, проблема в plant-данных.
+
+## 2026-11-04 — Разбор результатов
+
+- Гипотеза «SFT не останавливается» снята: медиана токенов plant test base 376 / SFT 109; медленные батчи — ожидание самого длинного ответа в батче.
+- Длина не объясняет разрыв: corr(len, judge) внутри SFT −0.25 dev / 0.09 test; попарно SFT 0 побед из 39 (dev и test).
+- Судья по самим целям SFT (ответы SE, dev, без ориентира): 4.79 vs base 7.00 vs S1 3.36 (`scripts/judge_references.py`). Данные хуже базы → причина регрессии.
+- Качественные ошибки SFT: уверенные фактические ошибки, выдуманный «личный опыт», зацикливание, игнор формата (30/34 провалов — ни одного пункта).
+- General +4.4 п.п. — в основном форма ответа (H₂O, «только число») и units, не рассуждения.
+- План S2: гейт качества целей → сузить тему → переписанные/отфильтрованные цели + assistant-only loss + format-примеры.

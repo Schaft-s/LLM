@@ -1,0 +1,20 @@
+model_id: Qwen/Qwen2.5-3B-Instruct
+revision: null  # pin after first successful download
+trust_remote_code: false
+torch_dtype: float16
+load_in_4bit: true
+bnb_4bit_compute_dtype: float16
+bnb_4bit_quant_type: nf4
+bnb_4bit_use_double_quant: true
+
+system_prompt: >
+  You are a helpful assistant. Answer clearly and accurately.
+  For plant-care questions, use only information given in the user message;
+  if key details are missing, say what is uncertain and ask a brief clarifying question.
+  You still answer ordinary non-plant questions normally.
+
+generation:
+  max_new_tokens: 512
+  temperature: 0.2
+  top_p: 0.9
+  do_sample: true

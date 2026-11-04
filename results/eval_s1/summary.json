@@ -1,0 +1,223 @@
+{
+  "model_id": "Qwen/Qwen2.5-3B-Instruct",
+  "generation": {
+    "max_new_tokens": 512,
+    "temperature": 0.2,
+    "top_p": 0.9,
+    "do_sample": true
+  },
+  "judge_model": "openai/gpt-4o-mini",
+  "adapter_root": "/content/drive/MyDrive/rk1_houseplant/s1_plant_qlora",
+  "candidates": [
+    "s1_final",
+    "s1_step50"
+  ],
+  "limit": null,
+  "results": {
+    "dev": {
+      "base": {
+        "general": {
+          "n": 80,
+          "accuracy": 0.825,
+          "per_category": {
+            "arc_easy": 0.95,
+            "arith": 0.9,
+            "extract": 1.0,
+            "json_schema": 1.0,
+            "logic": 0.6,
+            "stable_facts": 0.8,
+            "units": 0.4
+          },
+          "plant_topic_refusals": 0
+        },
+        "format": {
+          "n": 39,
+          "pass_rate": 0.9230769230769231
+        },
+        "judge": {
+          "n_ok": 39,
+          "n_expected": 39,
+          "mean_total": 6.538461538461538,
+          "per_dim": {
+            "factual_correctness": 1.6153846153846154,
+            "context_fit": 1.9230769230769231,
+            "practicality": 1.8717948717948718,
+            "calibrated_uncertainty": 1.1282051282051282
+          },
+          "critical_error_rate": 0.02564102564102564
+        }
+      },
+      "s1_final": {
+        "general": {
+          "n": 80,
+          "accuracy": 0.8625,
+          "per_category": {
+            "arc_easy": 1.0,
+            "arith": 0.7,
+            "extract": 1.0,
+            "json_schema": 1.0,
+            "logic": 0.6,
+            "stable_facts": 1.0,
+            "units": 0.6
+          },
+          "plant_topic_refusals": 0,
+          "transitions_vs_base": {
+            "correct_to_wrong": 3,
+            "wrong_to_correct": 6,
+            "both_correct": 63,
+            "both_wrong": 8
+          }
+        },
+        "format": {
+          "n": 39,
+          "pass_rate": 0.1794871794871795
+        },
+        "judge": {
+          "n_ok": 39,
+          "n_expected": 39,
+          "mean_total": 3.1538461538461537,
+          "per_dim": {
+            "factual_correctness": 0.7435897435897436,
+            "context_fit": 1.0256410256410255,
+            "practicality": 0.7948717948717948,
+            "calibrated_uncertainty": 0.5897435897435898
+          },
+          "critical_error_rate": 0.28205128205128205
+        }
+      },
+      "s1_step50": {
+        "general": {
+          "n": 80,
+          "accuracy": 0.8625,
+          "per_category": {
+            "arc_easy": 1.0,
+            "arith": 0.7,
+            "extract": 1.0,
+            "json_schema": 1.0,
+            "logic": 0.6,
+            "stable_facts": 1.0,
+            "units": 0.6
+          },
+          "plant_topic_refusals": 0,
+          "transitions_vs_base": {
+            "correct_to_wrong": 3,
+            "wrong_to_correct": 6,
+            "both_correct": 63,
+            "both_wrong": 8
+          }
+        },
+        "format": {
+          "n": 39,
+          "pass_rate": 0.23076923076923078
+        },
+        "judge": {
+          "n_ok": 39,
+          "n_expected": 39,
+          "mean_total": 2.9743589743589745,
+          "per_dim": {
+            "factual_correctness": 0.717948717948718,
+            "context_fit": 1.0512820512820513,
+            "practicality": 0.8205128205128205,
+            "calibrated_uncertainty": 0.38461538461538464
+          },
+          "critical_error_rate": 0.28205128205128205
+        }
+      }
+    },
+    "test": {
+      "base": {
+        "general": {
+          "n": 160,
+          "accuracy": 0.81875,
+          "per_category": {
+            "arc_easy": 0.9,
+            "arith": 1.0,
+            "extract": 1.0,
+            "json_schema": 1.0,
+            "logic": 0.5,
+            "stable_facts": 0.85,
+            "units": 0.4
+          },
+          "plant_topic_refusals": 0
+        },
+        "format": {
+          "n": 39,
+          "pass_rate": 0.9743589743589743
+        },
+        "judge": {
+          "n_ok": 39,
+          "n_expected": 39,
+          "mean_total": 6.641025641025641,
+          "per_dim": {
+            "factual_correctness": 1.6666666666666667,
+            "context_fit": 1.9230769230769231,
+            "practicality": 1.8717948717948718,
+            "calibrated_uncertainty": 1.1794871794871795
+          },
+          "critical_error_rate": 0.0
+        }
+      },
+      "s1_final": {
+        "general": {
+          "n": 160,
+          "accuracy": 0.8625,
+          "per_category": {
+            "arc_easy": 0.95,
+            "arith": 0.95,
+            "extract": 1.0,
+            "json_schema": 1.0,
+            "logic": 0.55,
+            "stable_facts": 0.85,
+            "units": 0.65
+          },
+          "plant_topic_refusals": 0,
+          "transitions_vs_base": {
+            "correct_to_wrong": 4,
+            "wrong_to_correct": 11,
+            "both_correct": 127,
+            "both_wrong": 18
+          }
+        },
+        "format": {
+          "n": 39,
+          "pass_rate": 0.1282051282051282
+        },
+        "judge": {
+          "n_ok": 39,
+          "n_expected": 39,
+          "mean_total": 3.6666666666666665,
+          "per_dim": {
+            "factual_correctness": 0.9487179487179487,
+            "context_fit": 1.1282051282051282,
+            "practicality": 1.0,
+            "calibrated_uncertainty": 0.5897435897435898
+          },
+          "critical_error_rate": 0.1282051282051282
+        }
+      }
+    }
+  },
+  "decisions": [
+    {
+      "variant": "s1_final",
+      "pass": false,
+      "detail": {
+        "general_drop_pp": -3.750000000000009,
+        "general_ok": true,
+        "plant_ok": false,
+        "plant_basis": "judge_mean_total"
+      }
+    },
+    {
+      "variant": "s1_step50",
+      "pass": false,
+      "detail": {
+        "general_drop_pp": -3.750000000000009,
+        "general_ok": true,
+        "plant_ok": false,
+        "plant_basis": "judge_mean_total"
+      }
+    }
+  ],
+  "selected": "base"
+}
