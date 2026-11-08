@@ -25,11 +25,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from src.data.io_jsonl import read_jsonl
-from src.eval.checkers import check_three_numbered_steps
+from src.eval.checkers import check_no_invented_experience
 from src.eval.score import aggregate_general, score_answer, transition_counts
 from src.train.sft_qlora import load_yaml
 
-FORMAT_SUFFIX = "\n\nGive exactly 3 numbered steps I should try first."
+PLANT_SUITES = ("plant", "garden")
 JUDGE_DIMS = ("factual_correctness", "context_fit", "practicality", "calibrated_uncertainty")
 
 
@@ -120,11 +120,9 @@ def build_suite(name: str, split: str, cfg: dict) -> list[dict[str, Any]]:
             {"id": r["id"], "prompt": user_text(r), "category": r["category"], "gold": r["gold"], "check": r["check"]}
             for r in read_jsonl(ROOT / paths[f"general_{split}"])
         ]
-    plant = read_jsonl(ROOT / paths[f"plant_{split}"])
-    if name == "plant":
-        return [{"id": r["id"], "prompt": user_text(r), "reference": r["messages"][1]["content"]} for r in plant]
-    if name == "format":
-        return [{"id": f"format-{r['id']}", "prompt": user_text(r) + FORMAT_SUFFIX} for r in plant]
+    if name in PLANT_SUITES:
+        rows = read_jsonl(ROOT / paths[f"{name}_{split}"])
+        return [{"id": r["id"], "prompt": user_text(r), "reference": r["messages"][1]["content"]} for r in rows]
     raise ValueError(name)
 
 
@@ -179,8 +177,8 @@ def general_metrics(rows: list[dict], base_rows: list[dict] | None) -> dict:
     return m
 
 
-def format_metrics(rows: list[dict]) -> dict:
-    flags = [check_three_numbered_steps(r["prediction"]).passed for r in rows]
+def autocheck_metrics(rows: list[dict]) -> dict:
+    flags = [check_no_invented_experience(r["prediction"]).passed for r in rows]
     return {"n": len(flags), "pass_rate": sum(flags) / max(1, len(flags))}
 
 
@@ -205,14 +203,20 @@ def evaluate_split(
     gen = run_generation(runner, variant, build_suite("general", split, cfg), out / f"general_{split}__{variant}.jsonl", limit)
     base_gen = None if variant == "base" else read_done(out / f"general_{split}__base.jsonl")
     res["general"] = general_metrics(gen, base_gen)
-    fmt = run_generation(runner, variant, build_suite("format", split, cfg), out / f"format_{split}__{variant}.jsonl", limit)
-    res["format"] = format_metrics(fmt)
-    plant = run_generation(runner, variant, build_suite("plant", split, cfg), out / f"plant_{split}__{variant}.jsonl", limit)
+    answers, judged_all = [], []
+    for suite in PLANT_SUITES:
+        rows = run_generation(runner, variant, build_suite(suite, split, cfg), out / f"{suite}_{split}__{variant}.jsonl", limit)
+        answers.extend(rows)
+        res[f"autocheck_{suite}"] = autocheck_metrics(rows)
+        if judge is not None:
+            judged = run_judging(judge, rows, out / f"judge_{suite}_{split}__{variant}.jsonl")
+            judged_all.extend(judged)
+            res[f"judge_{suite}"] = judge_metrics(judged, len(rows))
+    res["autocheck"] = autocheck_metrics(answers)
     if judge is not None:
-        judged = run_judging(judge, plant, out / f"judge_plant_{split}__{variant}.jsonl")
-        res["judge"] = judge_metrics(judged, len(plant))
+        res["judge"] = judge_metrics(judged_all, len(answers))
     results.setdefault(split, {})[variant] = res
-    log(f"   general acc={res['general']['accuracy']:.3f} format={res['format']['pass_rate']:.2f} "
+    log(f"   general acc={res['general']['accuracy']:.3f} no_invented_exp={res['autocheck']['pass_rate']:.2f} "
         f"judge={res.get('judge', {}).get('mean_total', 'n/a')}")
     return res
 
@@ -222,10 +226,10 @@ def passes_rule(base: dict, cand: dict, max_drop_pp: float) -> tuple[bool, dict]
     general_ok = drop_pp <= max_drop_pp
     if "judge" in base and "mean_total" in base["judge"] and "mean_total" in cand.get("judge", {}):
         plant_ok = cand["judge"]["mean_total"] >= base["judge"]["mean_total"]
-        plant_basis = "judge_mean_total"
+        plant_basis = "judge_mean_total_plant+garden"
     else:
-        plant_ok = cand["format"]["pass_rate"] >= base["format"]["pass_rate"]
-        plant_basis = "format_pass_rate"
+        plant_ok = cand["autocheck"]["pass_rate"] >= base["autocheck"]["pass_rate"]
+        plant_basis = "no_invented_experience_pass_rate"
     return general_ok and plant_ok, {
         "general_drop_pp": drop_pp,
         "general_ok": general_ok,
@@ -245,14 +249,20 @@ def write_summary(out: Path, summary: dict) -> None:
         if not block:
             continue
         lines.append(f"\n## {split}\n")
-        lines.append("| variant | general acc | format pass | judge mean (0-8) | critical err | c→w | w→c |")
-        lines.append("|---|---:|---:|---:|---:|---:|---:|")
+        lines.append(
+            "| variant | general acc | no invented exp | judge plant | judge garden | judge all (0-8) "
+            "| critical err | c→w | w→c |"
+        )
+        lines.append("|---|---:|---:|---:|---:|---:|---:|---:|---:|")
+        nan = float("nan")
         for v, r in block.items():
             j = r.get("judge", {})
             t = r["general"].get("transitions_vs_base", {})
             lines.append(
-                f"| {v} | {r['general']['accuracy']:.3f} | {r['format']['pass_rate']:.2f} | "
-                f"{j.get('mean_total', float('nan')):.2f} | {j.get('critical_error_rate', float('nan')):.2f} | "
+                f"| {v} | {r['general']['accuracy']:.3f} | {r['autocheck']['pass_rate']:.2f} | "
+                f"{r.get('judge_plant', {}).get('mean_total', nan):.2f} | "
+                f"{r.get('judge_garden', {}).get('mean_total', nan):.2f} | "
+                f"{j.get('mean_total', nan):.2f} | {j.get('critical_error_rate', nan):.2f} | "
                 f"{t.get('correct_to_wrong', '-')} | {t.get('wrong_to_correct', '-')} |"
             )
         lines.append("\nPer-category general accuracy:\n")
@@ -285,7 +295,7 @@ def make_plots(out: Path, summary: dict, adapter_root: Path) -> None:
         ax.plot(*zip(*tr), marker="o", label="train loss")
         if ev:
             ax.plot(*zip(*ev), marker="s", label="eval loss (plant_dev)")
-        ax.set_xlabel("step"); ax.set_ylabel("loss"); ax.set_title("S1 QLoRA training"); ax.legend()
+        ax.set_xlabel("step"); ax.set_ylabel("loss"); ax.set_title(f"QLoRA training ({adapter_root.name})"); ax.legend()
         fig.tight_layout(); fig.savefig(plots / "train_loss.png", dpi=120); plt.close(fig)
 
     for split, block in summary["results"].items():
@@ -308,7 +318,7 @@ def make_plots(out: Path, summary: dict, adapter_root: Path) -> None:
                 pd = block[v]["judge"]["per_dim"]
                 ax.bar([x + i * w for x in range(len(JUDGE_DIMS))], [pd[d] for d in JUDGE_DIMS], w, label=v)
             ax.set_xticks([x + w * (len(jv) - 1) / 2 for x in range(len(JUDGE_DIMS))], JUDGE_DIMS, rotation=15)
-            ax.set_ylim(0, 2); ax.set_ylabel("mean score (0-2)"); ax.set_title(f"judge plant_{split}"); ax.legend()
+            ax.set_ylim(0, 2); ax.set_ylabel("mean score (0-2)"); ax.set_title(f"judge plant+garden {split}"); ax.legend()
             fig.tight_layout(); fig.savefig(plots / f"judge_plant_{split}.png", dpi=120); plt.close(fig)
     log(f"plots → {plots}")
 
@@ -319,7 +329,7 @@ def make_plots(out: Path, summary: dict, adapter_root: Path) -> None:
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--out-dir", required=True)
-    p.add_argument("--adapter-root", required=True, help="S1 output dir (final adapter + checkpoint-*)")
+    p.add_argument("--adapter-root", required=True, help="SFT output dir (final adapter + checkpoint-*)")
     p.add_argument("--batch-size", type=int, default=8)
     p.add_argument("--limit", type=int, default=None, help="Rows per suite (smoke only)")
     p.add_argument("--no-judge", action="store_true")
@@ -341,11 +351,11 @@ def main() -> None:
         jcfg["cache_dir"] = str(out / "judge_cache")
         judge = OpenRouterJudge(jcfg)  # fails fast if OPENROUTER_API_KEY is missing
 
-    # Candidates in order of preference: full S1, then the softer earlier checkpoint.
-    adapters: dict[str, Path] = {"s1_final": adapter_root}
+    # Candidates in order of preference: full SFT, then the softer earlier checkpoint.
+    adapters: dict[str, Path] = {"sft_final": adapter_root}
     ckpts = sorted(adapter_root.glob("checkpoint-*"), key=lambda q: int(q.name.split("-")[1]))
     for c in ckpts[:-1]:
-        adapters[f"s1_step{c.name.split('-')[1]}"] = c
+        adapters[f"sft_step{c.name.split('-')[1]}"] = c
     candidates = list(adapters)
     log(f"candidates: {candidates}")
 
@@ -383,7 +393,7 @@ def main() -> None:
 
     if not args.skip_test:
         test_variants = ["base"] if selected == "base" else ["base", selected]
-        # Always report S1 on test too if nothing passed, so the report has a base-vs-SFT test table.
+        # Always report the full SFT on test too if nothing passed, so the report has a base-vs-SFT test table.
         if selected == "base":
             test_variants.append(candidates[0])
         for v in test_variants:

@@ -1,4 +1,37 @@
-from src.eval.checkers import check_three_numbered_steps
+import pytest
+
+from src.eval.checkers import check_no_invented_experience, check_three_numbered_steps
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Ferns prefer evenly moist soil; brown tips usually mean low humidity.",
+        "I think the roots are rotting. I'd use a gritty mix and water less.",
+        "### What Product Should I Use?\nA plastic divider works well.",
+        "I would suggest checking the drainage holes first.",
+    ],
+)
+def test_no_invented_experience_pass(text):
+    r = check_no_invented_experience(text)
+    assert r.passed, r.detail
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        # real S1 output (scale / submersion question)
+        "I have not heard of this method before, but I have seen it done with other plants.",
+        "I have used it with succulents and it works very well.",
+        "I've never seen a pot of soil that was completely sterile.",
+        "In my experience, orchids rebloom after a cool night period.",
+        "My own orchids sit in an east window.",
+    ],
+)
+def test_no_invented_experience_fail(text):
+    r = check_no_invented_experience(text)
+    assert not r.passed
+    assert "claims experience" in r.detail
 
 
 def test_three_steps_pass():

@@ -59,6 +59,30 @@ def check_three_numbered_steps(text: str) -> CheckResult:
     return CheckResult(name="three_numbered_steps", passed=True, detail="ok")
 
 
+_EXP_VERBS = (
+    r"grow|grew|grown|use|used|tried|try|seen|saw|kept|keep|had|found|noticed|planted|"
+    r"propagated|repotted|watered|lost|killed|done|did"
+)
+# Claims of first-hand experience or own plants. Opinions/advice ("I think", "I'd use") are allowed.
+INVENTED_EXPERIENCE_RE = re.compile(
+    r"(?<!should )(?<!would )(?<!could )(?<!can )(?<!do )(?<!shall )(?<!may )(?<!might )"
+    rf"\b(?:I(?: have|'ve| had)?(?: (?:never|also|often|always|usually|once|personally|recently|just|successfully))* (?:{_EXP_VERBS})\b"
+    r"|in my (?:experience|garden|yard|home|house|greenhouse|collection|area)"
+    r"|my (?:own )?(?:plants?|garden|yard|orchids?|succulents?|cact(?:i|us)|houseplants?|tomatoes|"
+    r"collection|greenhouse|balcony|windowsill)\b"
+    r"|where I live|I live in)",
+    re.IGNORECASE,
+)
+
+
+def check_no_invented_experience(text: str) -> CheckResult:
+    """Pass iff the answer does not claim personal experience or plants of its own."""
+    m = INVENTED_EXPERIENCE_RE.search(text or "")
+    if m:
+        return CheckResult("no_invented_experience", False, f"claims experience: {m.group(0)!r}")
+    return CheckResult("no_invented_experience", True, "ok")
+
+
 def check_nonempty(text: str, min_chars: int = 1) -> CheckResult:
     ok = bool(text) and len(text.strip()) >= min_chars
     return CheckResult("nonempty", ok, "ok" if ok else "empty_or_too_short")

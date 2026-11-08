@@ -20,6 +20,15 @@ python scripts/generate_baseline.py --dry-run
 python scripts/run_judge.py --input data/processed/plant_dev.jsonl --limit 1 --dry-run
 ```
 
+SFT v2 (полный дамп, все ответы, отбор судьёй; разбор — `reports/sft_v2_data.md`):
+
+```bash
+.venv-colab/bin/python scripts/build_sft_pool.py   # нужен токенизатор Qwen
+python scripts/judge_sft_pool.py --calibrate         # судья отбора на dev
+python scripts/judge_sft_pool.py                     # ~$3.3, кэш в data/judge_cache_sft/
+python scripts/select_sft_data.py                    # → data/sft_v2/sft_train.jsonl
+```
+
 Сырой dump: `data/raw/` (gitignored). SHA1 архива: `718db7040d0b608b1c969d4630d8bb95db87eec5`.
 
 ## Colab T4

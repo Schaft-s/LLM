@@ -1,0 +1,18 @@
+{
+  "questions_total": 17860,
+  "answers_total": 25421,
+  "answers_score_ge_min": 22920,
+  "prefilter_passed": 12641,
+  "prefilter_passed_questions": 8216,
+  "prefilter_passed_with_image_question": 2752,
+  "drop_reason_counts": {
+    "q_refers_to_image": 6920,
+    "tag_identification": 3742,
+    "short_answer": 1967,
+    "a_refers_to_image": 1772,
+    "a_img": 1380,
+    "closed": 320,
+    "too_long": 144,
+    "eval_holdout": 124
+  }
+}

@@ -3,6 +3,8 @@ seed: 42
 paths:
   plant_dev: data/processed/plant_dev.jsonl
   plant_test: data/processed/plant_test.jsonl
+  garden_dev: data/processed/garden_dev.jsonl
+  garden_test: data/processed/garden_test.jsonl
   general_dev: data/processed/general_dev.jsonl
   general_test: data/processed/general_test.jsonl
   outputs_dir: reports/metrics
@@ -24,14 +26,16 @@ general:
   arc_dataset: allenai/ai2_arc
   arc_config: ARC-Easy
 
-format_checker:
-  name: three_numbered_steps
+auto_checker:
+  name: no_invented_experience
   description: >
-    When the prompt asks for exactly three numbered steps, the answer must
-    contain three non-empty items labeled 1/2/3 without duplicating one tip.
+    Applied to every free-form plant/garden answer: fails if the answer claims
+    first-hand experience or plants of its own ("I've grown", "in my garden").
+    Opinions and advice ("I think", "I'd use") pass.
 
 checkpoint_rule:
   max_general_dev_drop_pp: 5.0
+  # judge mean over plant_dev + garden_dev pooled must not be below base
   require_plant_dev_not_worse: true
 
 baseline_prompts:
@@ -39,7 +43,7 @@ baseline_prompts:
     content: >
       My Boston fern has brown tips on several fronds. It sits near an east window,
       I water when the top inch of soil feels dry, and humidity is low in winter.
-      Give exactly 3 numbered steps I should try first.
+      What should I try first?
   - id: baseline_orchid_leaf
     content: >
       One lower leaf on my Phalaenopsis orchid is yellowing while the rest look healthy.

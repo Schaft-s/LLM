@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Score generation JSONL against general gold / format checker."""
+"""Score generation JSONL against general gold / no_invented_experience autocheck."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from src.data.io_jsonl import read_jsonl
-from src.eval.checkers import check_three_numbered_steps
+from src.eval.checkers import check_no_invented_experience
 from src.eval.score import aggregate_general, score_answer, transition_counts
 
 
@@ -20,20 +20,20 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--predictions", required=True, help="JSONL with id, prediction, and gold/check for general")
     parser.add_argument("--baseline", default=None, help="Optional baseline predictions for transitions")
-    parser.add_argument("--mode", choices=["general", "format"], default="general")
+    parser.add_argument("--mode", choices=["general", "autocheck"], default="general")
     parser.add_argument("--out", default=None)
     args = parser.parse_args()
 
     rows = read_jsonl(args.predictions)
-    if args.mode == "format":
+    if args.mode == "autocheck":
         scored = []
         for r in rows:
             pred = r.get("prediction") or r.get("response") or ""
-            cr = check_three_numbered_steps(pred)
-            scored.append({**r, "format_pass": cr.passed, "format_detail": cr.detail})
+            cr = check_no_invented_experience(pred)
+            scored.append({**r, "autocheck_pass": cr.passed, "autocheck_detail": cr.detail})
         summary = {
             "n": len(scored),
-            "pass_rate": sum(1 for r in scored if r["format_pass"]) / max(1, len(scored)),
+            "pass_rate": sum(1 for r in scored if r["autocheck_pass"]) / max(1, len(scored)),
         }
     else:
         scored = []

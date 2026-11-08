@@ -75,13 +75,15 @@ Expanded tags: `houseplants`, `indoors`, `container-gardening`, `containers`, `p
 
 ## 4. Оценивание и выбор чекпоинта
 
-**Автопроверка (главная для задания):** plant-промпт просит «3 numbered steps» → ровно 3 непустых пункта `1./2./3.` без дублирования одного совета.
+**Автопроверка (главная для задания):** с SFT v2 — `no_invented_experience` (`src/eval/checkers.py`): свободный ответ на plant/garden-вопрос не заявляет личный опыт или свои растения («I've grown», «in my garden»); мнения и советы («I think», «I'd use») допустимы. Проверка «3 numbered steps» была в РК1 и снята: в данных ~3% списков, учить формату пришлось бы перегенерацией всего корпуса.
+
+**Plant-оценка с SFT v2:** тема — все растения. `plant_dev/test` (39/39, комнатные, как в РК1) + `garden_dev/test` (40/40, остальные домены, отложены из отобранного пула и исключены из train).
 
 **General suite:** 6 категорий коротких задач (arith, units, extract, logic, JSON/schema, stable facts) + ARC-Easy subset (dev←validation, test←test). Метрики: overall + per-category accuracy; correct→wrong / wrong→correct; refusals вне темы.
 
 **Правило выбора чекпоинта (жёстко):**
 
-1. `plant_dev` не хуже базы (или лучше).
+1. `plant_dev` не хуже базы (или лучше); с SFT v2 — средняя оценка судьи по `plant_dev` ∪ `garden_dev`.
 2. `general_dev` не падает **больше чем на 5 п.п.** относительно базы.
 3. При конфликте — более мягкий чекпоинт / короче train; если ничего не проходит — оставить base и честно описать в отчёте.
 

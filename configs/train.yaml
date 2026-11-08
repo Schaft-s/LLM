@@ -1,9 +1,9 @@
-run_name: s1_plant_qlora
-output_dir: artifacts/weights/s1_plant_qlora
+run_name: s2_sft_v2
+output_dir: artifacts/weights/s2_sft_v2
 seed: 42
 
 data:
-  train_file: data/processed/plant_train.jsonl
+  train_file: data/sft_v2/sft_train.jsonl
   eval_file: data/processed/plant_dev.jsonl
 
 lora:

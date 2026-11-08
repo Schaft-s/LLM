@@ -1,0 +1,54 @@
+# SFT v2 data: full Gardening SE dump, all positive answers, filtered by an LLM judge.
+# Selection judge is a different model family from the evaluation judge (configs/judge.yaml).
+
+pool:
+  min_answer_score: 1
+  min_answer_chars: 200
+  # system + user + assistant under the Qwen chat template
+  max_total_tokens: 1536
+  drop_tags: [identification]
+  holdout_files:
+    - data/processed/plant_dev.jsonl
+    - data/processed/plant_test.jsonl
+
+judge:
+  provider: openrouter
+  base_url: https://openrouter.ai/api/v1/chat/completions
+  model: anthropic/claude-haiku-5.5
+  # the model does not accept temperature; verdicts are cached, so reruns are stable
+  temperature: null
+  max_tokens: 400
+  reasoning: {enabled: false}
+  # same Anthropic weights on every listed provider; fallback only within this list
+  allow_fallbacks: true
+  require_parameters: true
+  provider_order: [anthropic, google-vertex, claude-on-aws]
+  provider_only: [anthropic, google-vertex, claude-on-aws]
+  rubric_version: sft_target_v1
+  cache_dir: data/judge_cache_sft
+  price_per_m_input: 0.10
+  price_per_m_output: 0.50
+  budget_usd: 5.0
+  workers: 12
+
+select:
+  min_total: 7            # factual + context + practicality + calibration, 0-8
+  min_factual: 2
+  min_style: 1
+  max_answers_per_question: 2
+  # train max_length is 1024; margin for the system prompt (n_tokens was counted with the RK1 prompt)
+  max_train_tokens: 1000
+  # held-out non-indoor questions for eval (indoor is covered by plant_dev/test)
+  garden_dev_size: 40
+  garden_test_size: 40
+  seed: 42
+
+paths:
+  pool: data/sft_v2/pool.jsonl
+  pool_report: data/sft_v2/pool_report.json
+  judgments: data/sft_v2/judgments.jsonl
+  calibration: data/sft_v2/calibration_dev.jsonl
+  train: data/sft_v2/sft_train.jsonl
+  selection_report: data/sft_v2/selection_report.json
+  garden_dev: data/processed/garden_dev.jsonl
+  garden_test: data/processed/garden_test.jsonl
