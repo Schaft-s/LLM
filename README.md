@@ -33,12 +33,13 @@ python scripts/select_sft_data.py                    # → data/sft_v2/sft_train
 
 ## Colab T4
 
-1. Откройте `notebooks/rk1_colab.ipynb`, Runtime = GPU T4.
-2. Ячейка clone/`git pull`, затем `bash scripts/colab_install.sh` (пины 4.57/trl/peft; без `--force-reinstall`).
-3. Pilot: `python scripts/train_qlora.py --pilot` (save/reload + 1 generation).
-4. S1: `python scripts/train_qlora.py`.
-5. Сравните base vs adapter на `plant_*` и `general_*` одинаковыми decoding settings: `notebooks/rk1_eval_overnight.ipynb` (адаптер с Drive, результаты на Drive, возобновляемо).
-6. Чекпоинт: plant_dev не хуже базы **и** general_dev не падает больше чем на **5 п.п.**
+Один ноутбук `notebooks/rk1_colab.ipynb` (Runtime = GPU T4, Secret `OPENROUTER_API_KEY`, Run all):
+
+1. clone/`git pull`, затем `bash scripts/colab_install.sh` (пины 4.57/trl/peft; без `--force-reinstall`).
+2. Pilot: `python scripts/train_qlora.py --pilot` (save/reload + 1 generation).
+3. S2: `python scripts/train_qlora.py` на `data/sft_v2/sft_train.jsonl` → копия адаптера в `MyDrive/rk1_houseplant/s2_sft_v2`; если адаптер там уже есть, обучение пропускается.
+4. `scripts/run_eval_pipeline.py`: base vs adapter на `plant_*`, `garden_*`, `general_*` одинаковыми decoding settings, результаты в `MyDrive/rk1_houseplant/eval_s2` (возобновляемо).
+5. Чекпоинт: судья по plant_dev ∪ garden_dev не хуже базы **и** general_dev не падает больше чем на **5 п.п.**
 
 Не ставьте голый `pip install -U transformers trl peft` — ломает API и даёт `HybridCache` ImportError (peft 0.17 × transformers 5).
 
@@ -59,7 +60,7 @@ pytest -q
 
 LoRA-адаптер S1 (safetensors, + checkpoint-50/93) и копия результатов оценки: [Google Drive: rk1_houseplant](https://drive.google.com/drive/folders/1g7BVgQWBTlDQSJo2VaVZyYB7fwkrT-6c?usp=sharing).
 
-Воспроизвести оценку без обучения: загрузить папку адаптера в `MyDrive/rk1_houseplant/s1_plant_qlora`, открыть `notebooks/rk1_eval_overnight.ipynb` в Colab (T4), добавить Secret `OPENROUTER_API_KEY`, Run all.
+Воспроизвести оценку РК1 без обучения: коммит `efbe34a`, папка адаптера в `MyDrive/rk1_houseplant/s1_plant_qlora`, `notebooks/rk1_eval_overnight.ipynb` в Colab (T4), Secret `OPENROUTER_API_KEY`, Run all.
 
 ## Что уже в репозитории
 
