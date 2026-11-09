@@ -1,0 +1,50 @@
+seed: 42
+
+paths:
+  plant_dev: data/processed/plant_dev.jsonl
+  plant_test: data/processed/plant_test.jsonl
+  garden_dev: data/processed/garden_dev.jsonl
+  garden_test: data/processed/garden_test.jsonl
+  general_dev: data/processed/general_dev.jsonl
+  general_test: data/processed/general_test.jsonl
+  outputs_dir: reports/metrics
+
+general:
+  dev_size: 80
+  test_size: 160
+  categories:
+    - arith
+    - units
+    - extract
+    - logic
+    - json_schema
+    - stable_facts
+  per_category_dev: 10
+  per_category_test: 20
+  arc_easy_dev: 20
+  arc_easy_test: 40
+  arc_dataset: allenai/ai2_arc
+  arc_config: ARC-Easy
+
+auto_checker:
+  name: no_invented_experience
+  description: >
+    Applied to every free-form plant/garden answer: fails if the answer claims
+    first-hand experience or plants of its own ("I've grown", "in my garden").
+    Opinions and advice ("I think", "I'd use") pass.
+
+checkpoint_rule:
+  max_general_dev_drop_pp: 5.0
+  # judge mean over plant_dev + garden_dev pooled must not be below base
+  require_plant_dev_not_worse: true
+
+baseline_prompts:
+  - id: baseline_fern_tips
+    content: >
+      My Boston fern has brown tips on several fronds. It sits near an east window,
+      I water when the top inch of soil feels dry, and humidity is low in winter.
+      What should I try first?
+  - id: baseline_orchid_leaf
+    content: >
+      One lower leaf on my Phalaenopsis orchid is yellowing while the rest look healthy.
+      The plant is in bark mix, watered weekly. What should I check, and what should I do next?

@@ -58,6 +58,8 @@ pytest -q
 
 Отчёт: `reports/rk1_report.md`. Сводка метрик, генерации, оценки судьи, лог: `results/eval_s1/` (`summary.md`), графики: `reports/plots/`. Выполненные ноутбуки T4: `results/*.ipynb`.
 
+SFT v2 (данные, отобранные судьёй; часть III отчёта): сводка и генерации — `results/eval_s2/`, графики — `reports/plots_s2/`. Итог тот же: ни один чекпоинт не прошёл правило, выбрана база.
+
 LoRA-адаптер S1 (safetensors, + checkpoint-50/93) и копия результатов оценки: [Google Drive: rk1_houseplant](https://drive.google.com/drive/folders/1g7BVgQWBTlDQSJo2VaVZyYB7fwkrT-6c?usp=sharing).
 
 Воспроизвести оценку РК1 без обучения: коммит `efbe34a`, папка адаптера в `MyDrive/rk1_houseplant/s1_plant_qlora`, `notebooks/rk1_eval_overnight.ipynb` в Colab (T4), Secret `OPENROUTER_API_KEY`, Run all.

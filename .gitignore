@@ -17,6 +17,7 @@ wandb/
 runs/
 artifacts/weights/
 results/eval_s1/judge_cache/
+results/eval_s2/judge_cache/
 data/judge_cache_sft/
 data/sft_v2/pool.jsonl
 .ipynb_checkpoints/
